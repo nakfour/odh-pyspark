@@ -1,4 +1,1 @@
-Flask
-flask-cors
-pymongo
 requests
