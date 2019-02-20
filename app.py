@@ -25,7 +25,7 @@ hadoopConf.set("fs.s3a.secret.key", secretKey)
 hadoopConf.set("fs.s3a.endpoint", endpointUrl) 
 
 #Get the SQL context
-sqlContext = spark.SQLContext()
+#sqlContext = spark.SQLContext()
 
 #feedbackFile = sqlContext.read.option("sep", "\t").csv("s3a://" + s3Bucket + "/datasets/sentiment_data.tsv", header=True)
 
