@@ -33,7 +33,9 @@ hadoopConf.set("fs.s3a.endpoint", endpointUrl)
 
 #Read a file from S3
 #https://s3-us-west-2.amazonaws.com/nakfour/customer.json
-df = spark.texfile("s3a://nakfour/customer.json")
-print(df.head())
+
+
+df = spark.sparkContext.textFile("s3a://nakfour/customer.json")
+#print(df.head())
 #Stop the spark cluster
 spark.stop()
