@@ -26,7 +26,7 @@ hadoopConf.set("fs.s3a.endpoint", endpointUrl)
 hadoopConf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem" )
 
 #Get the SQL context
-#sqlContext = spark.SQLContext()
+sqlContext = spark.SQLContext(spark.sparkContext)
 
 #feedbackFile = sqlContext.read.option("sep", "\t").csv("s3a://" + s3Bucket + "/datasets/sentiment_data.tsv", header=True)
 
@@ -37,7 +37,7 @@ hadoopConf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem" )
 
 
 #df = spark.sparkContext.textFile("s3a://nakfour/customer.json")
-df = spark.read.json("s3a://nakfour/customer.json")
+df = sqlContext.jsonFile("s3a://nakfour/customer.json")
 print(df.head())
 #Stop the spark cluster
 spark.stop()
