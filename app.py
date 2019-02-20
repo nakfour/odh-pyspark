@@ -25,7 +25,7 @@ hadoopConf.set("fs.s3a.secret.key", secretKey)
 hadoopConf.set("fs.s3a.endpoint", endpointUrl) 
 
 #Get the SQL context
-#sqlContext = pyspark.SQLContext(sc)
+sqlContext = spark.SQLContext()
 
 #feedbackFile = sqlContext.read.option("sep", "\t").csv("s3a://" + s3Bucket + "/datasets/sentiment_data.tsv", header=True)
 
@@ -33,7 +33,7 @@ hadoopConf.set("fs.s3a.endpoint", endpointUrl)
 
 #Read a file from S3
 #https://s3-us-west-2.amazonaws.com/nakfour/customer.json
-df = spark.read.json("s3a://nakfour/customer.json")
+df = spark.texfile("s3a://nakfour/customer.json")
 print(df.head())
 #Stop the spark cluster
 spark.stop()
