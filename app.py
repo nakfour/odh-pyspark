@@ -26,7 +26,7 @@ hadoopConf.set("fs.s3a.endpoint", endpointUrl)
 hadoopConf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem" )
 
 #Get the SQL context
-sqlContext = spark.SQLContext(spark.sparkContext)
+sqlContext = SQLContext(spark.sparkContext)
 
 #feedbackFile = sqlContext.read.option("sep", "\t").csv("s3a://" + s3Bucket + "/datasets/sentiment_data.tsv", header=True)
 
