@@ -36,7 +36,7 @@ hadoopConf.set("fs.s3a.endpoint", endpointUrl)
 
 
 #df = spark.sparkContext.textFile("s3a://nakfour/customer.json")
-df = spark.sparkContext.read.json("s3a://nakfour/customer.json")
+df = spark.read.json("s3a://nakfour/customer.json")
 print(df.head())
 #Stop the spark cluster
 spark.stop()
