@@ -23,6 +23,7 @@ hadoopConf=spark.sparkContext._jsc.hadoopConfiguration()
 hadoopConf.set("fs.s3a.access.key", accessKey) 
 hadoopConf.set("fs.s3a.secret.key", secretKey) 
 hadoopConf.set("fs.s3a.endpoint", endpointUrl) 
+hadoopConf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem" )
 
 #Get the SQL context
 #sqlContext = spark.SQLContext()
