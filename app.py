@@ -37,7 +37,8 @@ sqlContext = SQLContext(spark.sparkContext)
 
 
 #df = spark.sparkContext.textFile("s3a://nakfour/customer.json")
-customerFile = sqlContext.read.json("s3a://nakfour/customer.json")
+#customerFile = sqlContext.read.json("s3a://nakfour/customer.json")
+customerFile = spark.read.json("s3a://nakfour/customer.json",multiLine=True)
 customerFile.show()  
 customerFile.printSchema()
 #Stop the spark cluster
