@@ -41,5 +41,7 @@ sqlContext = SQLContext(spark.sparkContext)
 customerFile = spark.read.json("s3a://nakfour/customer.json",multiLine=True)
 customerFile.show()  
 customerFile.printSchema()
+print("Writing Parquet File to Storage")
+df.write.parquet("s3a://nakfour/customer.parquet")
 #Stop the spark cluster
 spark.stop()
