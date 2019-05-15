@@ -1,12 +1,15 @@
-# This program just collects data and stores them in .csv file in S3 storage
-# At this point we just read the file from local folder and upload to S3
-# This can be changed later to add filtering and collecting data from databases or other stores
-
+import pyspark
 import os
-import boto3
-
+from pyspark.sql import SparkSession, SQLContext
+from pyspark.context import SparkContext
 
 print("Start")
+#on openshift
+spark = SparkSession.builder.appName("odh-pyspark").getOrCreate()
+
+#Reading from local file
+#df=spark.read.csv('sample.csv',header=True)
+#print(df.head())
 
 #Reading CEPH setup
 accessKey= os.environ['ACCESS_KEY_ID']
@@ -15,13 +18,30 @@ endpointUrl= os.environ['S3_ENDPOINT_URL']
 print(endpointUrl)
 #s3Bucket= os.environ['S3BUCKET']
 
+#Set the Hadoop configurations to access Ceph S3
+hadoopConf=spark.sparkContext._jsc.hadoopConfiguration()
+hadoopConf.set("fs.s3a.access.key", accessKey) 
+hadoopConf.set("fs.s3a.secret.key", secretKey) 
+hadoopConf.set("fs.s3a.endpoint", endpointUrl) 
+hadoopConf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem" )
 
-# Create an S3 client
-s3 = boto3.client(service_name='s3',aws_access_key_id=accessKey, aws_secret_access_key=secretKey, endpoint_url=endpointUrl)
-s3.create_bucket(Bucket='OPEN')
+#Get the SQL context
+sqlContext = SQLContext(spark.sparkContext)
+
+#feedbackFile = sqlContext.read.option("sep", "\t").csv("s3a://" + s3Bucket + "/datasets/sentiment_data.tsv", header=True)
+
+#feedbackFile.show()
+
+#Read a file from S3
+#https://s3-us-west-2.amazonaws.com/nakfour/customer.json
 
 
-# Upload to Rook/Ceph in bucket Open and key uploaded/creditcard-sample10k.csv
-key = "uploaded/creditcard-sample10k.csv"
-s3.upload_file(Bucket='OPEN', Key=key, Filename="creditcard-sample10k.csv")
-s3.list_objects(Bucket='OPEN')
+#df = spark.sparkContext.textFile("s3a://nakfour/customer.json")
+#customerFile = sqlContext.read.json("s3a://nakfour/customer.json")
+customerFile = spark.read.json("s3a://nakfour/customer.json",multiLine=True)
+customerFile.show()  
+customerFile.printSchema()
+print("Writing Parquet File to Storage")
+customerFile.write.parquet("s3a://nakfour/customer.parquet")
+#Stop the spark cluster
+spark.stop()
